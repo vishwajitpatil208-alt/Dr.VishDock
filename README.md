@@ -33,12 +33,12 @@ Report) with one robust Python script — now with powered by Rich.
 
 | Stage | Capability |
 |-------|-----------|
-| **Stage 1** — Protein Modeling | Accepts **PDB ID** (RCSB), **UniProt ID** (AlphaFold DB / ESMFold fallback), **FASTA file or raw sequence**, or local `.pdb` file. Auto-detects the input type. |
+| **Stage 1** — Protein Modeling | Accepts **PDB ID** (RCSB)
 | **Stage 2** — Protein Fixing | PDBFixer cleanup (waters removed, missing residues/atoms rebuilt, hydrogens at pH 7.4) + OpenMM Amber14/GBN2 energy minimization + Gasteiger-charged PDBQT receptor (Meeko → Open Babel fallback). |
-| **Stage 3** — Ligand Prep | Accepts **SMILES string**, `.smi`, `.sdf`, `.mol2`, `.mol`, or `.pdb`. 3D embed (ETKDGv3) + MMFF94 optimization + Meeko PDBQT with proper torsions. |
+| **Stage 3** — Ligand Prep | Accepts **SMILES string**, `.smi`. 3D embed (ETKDGv3) + MMFF94 optimization + Meeko PDBQT with proper torsions. |
 | **Stage 4** — Docking | **AutoDock Vina** via Python API (CLI fallback). Auto binding-site detection: user grid → co-crystal HETATM center → blind protein COM. Multi-pose ranking. |
 | **Stage 5** — Visualization | **PyMOL** (open-source) publication-quality PNG of best pose + interaction residues highlighted, plus distance-based H-bond / hydrophobic interaction analysis, plus a single-page **PDF report** per run via ReportLab. |
-| **Batch / Parallel** | CSV-driven batch (`--csv`), folder × folder cross-docking (`--protein-dir`/`--ligand-dir`), N parallel workers (`--parallel N`), aggregated `summary.csv` + `summary.json`. |
+
 
 ---
 
