@@ -1,0 +1,61 @@
+# ============================================================================
+#  Conda environment for the Medvolt Docking Pipeline
+#  Create with:    conda env create -f environment.yml
+#  Activate with:  conda activate docking-pipeline
+# ============================================================================
+#
+#  This file pins versions known to work together as of mid-2025.
+#  All channels are open source. Tested on Linux x86_64 and macOS.
+#
+#  Approximate install footprint: ~3.5 GB
+# ============================================================================
+name: docking-pipeline
+
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  # -- Python runtime --------------------------------------------------------
+  - python=3.10
+
+  # -- Core scientific stack -------------------------------------------------
+  - numpy
+  - pandas
+  - scipy
+  - tqdm
+  - requests
+  - pyyaml
+
+  # -- Cheminformatics / molecular toolkits ---------------------------------
+  - rdkit>=2023.09.1
+  - openbabel>=3.1
+  - biopython
+
+  # -- Protein modeling / fixing / minimization -----------------------------
+  - openmm>=8.0
+  - pdbfixer>=1.9
+
+  # -- Ligand preparation for Vina ------------------------------------------
+  - meeko>=0.5
+
+  # -- Docking ---------------------------------------------------------------
+  - vina>=1.2.5
+
+  # -- Visualization ---------------------------------------------------------
+  - pymol-open-source>=2.5
+
+  # -- Plotting & images -----------------------------------------------------
+  - matplotlib
+  - pillow
+
+  # -- PDF reporting ---------------------------------------------------------
+  - reportlab
+
+  # -- Hacker-style terminal UI ---------------------------------------------
+  - rich>=13.0
+
+  # -- Pip-only extras (fallbacks / optional) -------------------------------
+  - pip
+  - pip:
+      - prolif>=2.0   # nicer interaction analysis (optional; pipeline works without)
