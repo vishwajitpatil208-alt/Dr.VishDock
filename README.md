@@ -5,7 +5,7 @@
 A single-command, end-to-end pipeline that implements all five stages of
 structure-based docking (Protein Modeling → Fixing → Ligand Prep → Docking →
 Visualization & Report) with one robust Python script — featuring a
-**pro-level hacker/gamer terminal UI** powered by Rich.
+**pro-level script powered by Rich.
 
 ---
 
@@ -44,7 +44,7 @@ See [Run Commands](#-run-commands) below for CSV-batch and folder-batch modes.
 | Upgrade | Details |
 |---------|---------|
 | **Rebranded: Dr. VishDOCK** | New ASCII banner, all UI text and CLI help updated. |
-| **Hardened ligand format support** | `.pdb`, `.sdf`, `.mol2`, `.mol`, `.smi`, and inline SMILES all go through a **two-strategy fallback chain**: RDKit's native reader first, then Open Babel bond-order perception if RDKit fails or returns zero bonds (the common failure mode for `.pdb` ligand snippets lacking CONECT records). |
+| **Hardened ligand format support** | inline SMILES : RDKit's native reader first, then Open Babel bond-order perception if RDKit fails or returns zero bonds (the common failure mode for `.pdb` ligand snippets lacking CONECT records). |
 | **Salt/fragment stripping** | Multi-fragment ligand inputs (e.g. a SMILES salt form `"CC(=O)O.[Na+]"`, or a PDB/MOL2 snippet that picked up a stray ion) automatically keep only the largest fragment - the real ligand. |
 | **Fixed a path/SMILES ambiguity bug** | A mistyped or missing path like `ligand.pdb` previously fell through silently and was misclassified as the literal SMILES string `"ligand.pdb"`, producing a baffling "Invalid SMILES" error. Now raises a clear `FileNotFoundError` immediately. Verified safe against legitimate stereo-SMILES containing `/` or `\` (e.g. `C/C=C/C`). |
 | **CSV mode hardened** | Empty/malformed CSVs, missing required columns, blank cells, and missing files now all produce clear `SystemExit` messages instead of raw tracebacks. Relative paths in a CSV resolve against the CSV's own folder if not found relative to the current working directory - so a CSV can be run from anywhere. A `smiles` column is accepted as an alias for `ligand`. |
@@ -116,7 +116,7 @@ See [`test_data/README.md`](test_data/README.md) for details.
 |-------|-----------|
 | **Stage 1** — Protein Modeling | Accepts **PDB ID** (RCSB), **UniProt ID** (AlphaFold DB / ESMFold fallback), **FASTA file or raw sequence**, or local `.pdb` file. Auto-detects the input type. |
 | **Stage 2** — Protein Fixing | PDBFixer cleanup (waters removed, missing residues/atoms rebuilt, hydrogens at pH 7.4) + OpenMM Amber14/GBN2 energy minimization + Gasteiger-charged PDBQT receptor (Meeko → Open Babel fallback). |
-| **Stage 3** — Ligand Prep | Accepts **SMILES string**, `.smi`, `.sdf`, `.mol2`, `.mol`, or `.pdb`. 3D embed (ETKDGv3) + MMFF94 optimization + Meeko PDBQT with proper torsions. |
+| **Stage 3** — Ligand Prep | Accepts **SMILES string**. 3D embed (ETKDGv3) + MMFF94 optimization + Meeko PDBQT with proper torsions. |
 | **Stage 4** — Docking | **AutoDock Vina** via Python API (CLI fallback). Auto binding-site detection: user grid → co-crystal HETATM center → blind protein COM. Multi-pose ranking. |
 | **Stage 5** — Visualization | **PyMOL** (open-source) publication-quality PNG of best pose + interaction residues highlighted, plus distance-based H-bond / hydrophobic interaction analysis, plus a single-page **PDF report** per run via ReportLab. |
 | **Batch / Parallel** | CSV-driven batch (`--csv`), folder × folder cross-docking (`--protein-dir`/`--ligand-dir`), N parallel workers (`--parallel N`), aggregated `summary.csv` + `summary.json`. |
@@ -170,14 +170,6 @@ python docking_pipeline.py \
     --center 12.3 -4.5 27.8 \
     --size 22 22 22 \
     --output results/
-
-# FASTA sequence (ESMFold) + SMILES, skip minimization for speed
-python docking_pipeline.py \
-    --protein "MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQAPILSRVGDGTQDNLS..." \
-    --ligand "c1ccccc1O" \
-    --no-minimize \
-    --output results/
-```
 
 ### 2. CSV-driven batch (recommended for many jobs)
 
@@ -250,7 +242,7 @@ results/
 
 | Flag | Description |
 |------|-------------|
-| `--protein <X>` | PDB ID / UniProt ID / FASTA / file |
+| `--protein <X>` | PDB ID / UniProt ID / file |
 | `--ligand <Y>`  | SMILES / .sdf / .mol2 / .pdb / .mol / .smi |
 | `--csv FILE`    | CSV batch mode |
 | `--protein-dir DIR --ligand-dir DIR` | Folder batch mode |
