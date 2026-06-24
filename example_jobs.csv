@@ -1,0 +1,4 @@
+protein,ligand,name
+1HSG,CC(=O)Oc1ccccc1C(=O)O,1HSG_aspirin
+3HTB,CC(C)Cc1ccc(C(C)C(O)=O)cc1,3HTB_ibuprofen
+4LDE,CN1C=NC2=C1C(=O)N(C(=O)N2C)C,4LDE_caffeine
